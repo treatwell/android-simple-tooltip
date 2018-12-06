@@ -4,13 +4,16 @@ apply plugin: 'com.github.dcendents.android-maven'
 group = 'com.github.douglasjunior'
 
 android {
-    compileSdkVersion 24
+    compileSdkVersion versions.compileSdk
+    buildToolsVersion versions.buildTools
 
     defaultConfig {
         minSdkVersion 7
-        targetSdkVersion 24
+        targetSdkVersion versions.targetSdk
         versionCode 9
-        versionName "0.2.2"
+        versionName "tw_0.2.2"
+
+        setProperty("archivesBaseName", "android-simple-tooltip_${versionName}.${versionCode}")
     }
     buildTypes {
         release {
@@ -32,31 +35,6 @@ buildscript {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:support-annotations:24.0.0'
+    compile "com.android.support:support-annotations:${versions.support}"
 }
 
-// build a jar with source files
-task sourcesJar(type: Jar) {
-    //noinspection GroovyAssignabilityCheck
-    from android.sourceSets.main.java.srcDirs
-    classifier = 'sources'
-}
-
-task javadoc(type: Javadoc) {
-    failOnError false
-    source = android.sourceSets.main.java.sourceFiles
-    //noinspection GroovyAssignabilityCheck
-    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-    classpath += configurations.compile
-}
-
-// build a jar with javadoc
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from javadoc.destinationDir
-}
-
-artifacts {
-    archives sourcesJar
-    archives javadocJar
-}
